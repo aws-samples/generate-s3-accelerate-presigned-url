@@ -64,10 +64,12 @@ public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatew
         java.time.Duration expiration = java.time.Duration.ofHours(1);
 
         // Generate the presigned URL
-        String presignedUrl = presigner.presignGetObject(builder ->
-                builder.signatureDuration(expiration)
-                        .getObjectRequest(builder1 ->
-                                builder1.bucket(bucketName).key(objectKey))).url().toString();
+        String presignedUrl = presigner.presignPutObject(builder ->
+                                                            builder.signatureDuration(expiration)
+                                                                   .putObjectRequest(builder1 ->
+                                                                    builder1.bucket(bucketName).key(objectKey)))
+                                        .url()
+                                        .toString();
 
         return presignedUrl;
     }

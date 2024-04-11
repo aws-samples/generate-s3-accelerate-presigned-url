@@ -53,13 +53,16 @@ Resources:
       MemorySize: 512
       Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
         Variables:
-          BUCKET_NAME: !Ref S3BucketName
+          BUCKET_NAME: !Ref S3Bucket
       Events:
         GenerateUrl:
           Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
           Properties:
             Path: /upload
             Method: post
+      Policies:
+        - S3WritePolicy:
+            BucketName: !Ref S3Bucket
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
