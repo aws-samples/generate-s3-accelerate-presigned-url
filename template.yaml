@@ -60,9 +60,19 @@ Resources:
           Properties:
             Path: /upload
             Method: post
+            RestApiId: !Ref GenerateUrlApi
       Policies:
         - S3WritePolicy:
             BucketName: !Ref S3Bucket
+
+  #API with Lambda no proxy integration
+  GenerateUrlApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      EndpointConfiguration: REGIONAL
+      Auth:
+        DefaultAuthorizer: AWS_IAM
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
@@ -70,7 +80,7 @@ Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   GenerateUrlApi:
     Description: API Gateway endpoint URL for Prod stage for Generate Url function
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/upload/"
+    Value: !Sub "https://${GenerateUrlApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/upload/"
   GenerateUrlFunction:
     Description: Generate Url Lambda Function ARN
     Value: !GetAtt GenerateUrlFunction.Arn
